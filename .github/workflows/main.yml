@@ -1,0 +1,41 @@
+name: 'ZJU-nCov-Hitcarder Action'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - username: ZJU_USERNAME
+            password: ZJU_PASSWORD
+            dingtalk_token: DINGTALK_TOKEN
+            serverchan_key: SERVERCHAN_KEY
+          - username: ZJU_USERNAME2
+            password: ZJU_PASSWORD2
+            dingtalk_token: DINGTALK_TOKEN2
+            serverchan_key: SERVERCHAN_KEY2
+          - username: ZJU_USERNAME3
+            password: ZJU_PASSWORD3
+            dingtalk_token: DINGTALK_TOKEN3
+            serverchan_key: SERVERCHAN_KEY3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: 'Set up Python'
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: 'Install requirements'
+        run: pip3 install -r ./requirements.txt
+      - name: Working
+        with:
+          username: ${{ secrets[matrix.username] }}
+          password: ${{ secrets[matrix.password] }}
+          dingtalk_token: ${{ secrets[matrix.dingtalk_token] }}
+          serverchan_key: ${{ secrets[matrix.serverchan_key] }}
